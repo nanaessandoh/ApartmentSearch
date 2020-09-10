@@ -9,6 +9,7 @@ namespace ApartmentSearch.Controllers
 {
     public class ListingController : Controller
     {
+
         // GET: ListingController
         public ActionResult Index()
         {

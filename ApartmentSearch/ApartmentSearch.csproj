@@ -21,6 +21,7 @@
   <ItemGroup>
     <Folder Include="Service\Interface\" />
     <Folder Include="Views\Listing\" />
+    <Folder Include="wwwroot\images\listings\" />
   </ItemGroup>
 
 </Project>
