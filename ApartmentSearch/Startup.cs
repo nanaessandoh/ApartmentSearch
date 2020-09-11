@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ApartmentSearch.Data;
+using ApartmentSearch.Service;
+using ApartmentSearch.Service.Interface;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,6 +27,7 @@ namespace ApartmentSearch
             services.AddRazorPages();
             services.AddDbContext<ApartmentsDbContext>(options => options
             .UseSqlServer(Configuration.GetConnectionString("ApartmentSearchDbContextConnection")));
+            services.AddScoped<IListing, ListingService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

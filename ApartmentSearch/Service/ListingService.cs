@@ -1,13 +1,12 @@
 ﻿using ApartmentSearch.Data;
+using ApartmentSearch.Service.Interface;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
 
 namespace ApartmentSearch.Service
 {
@@ -72,6 +71,12 @@ namespace ApartmentSearch.Service
         public bool ListingExist(int apartmentId)
         {
             return _context.ApartmentListings.Any(x => x.Id == apartmentId);
+        }
+
+        public string GetListingImage(int apartmentId)
+        {
+            return GetApartmentImages(apartmentId).FirstOrDefault();
+  
         }
 
         public string GetImageExtension(string filename)

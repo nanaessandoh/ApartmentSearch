@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ApartmentSearch.Service
+namespace ApartmentSearch.Service.Interface
 {
     public interface IListing
     {
@@ -17,6 +17,7 @@ namespace ApartmentSearch.Service
         void DeleteListing(int apartmentId);
         bool IsImage(string filename);
         bool ListingExist(int apartmentId);
+        string GetListingImage(int apartmentId);
         string GetImageExtension(string filename);
         void DeleteListingPhotos(int apartmentId);
         IEnumerable<string> GetApartmentImages(int apartmentId);
