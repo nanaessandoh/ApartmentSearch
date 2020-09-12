@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 
 namespace ApartmentSearch.Service
 {
@@ -142,6 +141,16 @@ namespace ApartmentSearch.Service
                 imageFile.CopyTo(stream);
                 stream.Flush();
             }
+        }
+
+        public bool AllFilesAreImages(IEnumerable<IFormFile> Files)
+        {
+            bool passed = true;
+            foreach( var formFile in Files)
+            {
+                passed &= IsImage(formFile.FileName);
+            }
+            return passed;
         }
     }
 }

@@ -1,7 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using ApartmentSearch.Data;
 using ApartmentSearch.Models.Home;
 using ApartmentSearch.Service.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -9,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ApartmentSearch.Controllers
 {
+    [Authorize]
     public class ListingController : Controller
     {
         private readonly IListing _listingService;
@@ -26,7 +31,8 @@ namespace ApartmentSearch.Controllers
         // GET: ListingController
         public ActionResult Index()
         {
-            var allListings = _listingService.GetAll();
+            var currentUserId = _userManager.GetUserId(User);
+            var allListings = _listingService.GetUserApartment(currentUserId);
 
             var listingResult = allListings.Select(x => new ListingModel
             {
@@ -82,58 +88,163 @@ namespace ApartmentSearch.Controllers
         // POST: ListingController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create([Bind("Id, Description, Address, PostCode, PricePerMonth, NoOfBedrooms, NoOfBaths, OffStreetParking, LaundryAvailable, Files")] ApartmentListing apartmentListing)
         {
-            try
+            // Check if the model is Valid
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                // Check if Files were selected for the Listing
+                if(apartmentListing.Files != null)
+                {
+                    // Check if files are all images i.e. jpeg, jpg, png, bmp
+                    if(_listingService.AllFilesAreImages(apartmentListing.Files))
+                    {
+                        // Create an empty IEnumerable of Listing Images
+                        IEnumerable<ListingImage> Images = Enumerable.Empty<ListingImage>();
+
+                        foreach ( var formFile in apartmentListing.Files)
+                        {
+                            // Create a random file name for the Profile Image
+                            string randomFileName = Guid.NewGuid().ToString();
+                            // Get the extension of the filename
+                            string imageExtension = _listingService.GetImageExtension($"{formFile.FileName}");
+                            // Create the URL to the image
+                            string imageUrl = $"/images/listings/{randomFileName}{imageExtension}";
+                            // Create an Image listing object
+                            var image = new ListingImage
+                            {
+                                ApartmentListing = apartmentListing,
+                                ImageUrl = imageUrl
+                            };
+                            // Add the Image to IEnumerator of Listing Images
+                            Images.Append(image);
+                            // Copy the Image into the wwwroot/images/listings folder
+                            _listingService.UploadListingImage(randomFileName, imageExtension, formFile);
+                        }
+
+                        // Assign Images 
+                        apartmentListing.Images = Images;
+                        // Get and Assign User
+                        var currentUser = await _userManager.GetUserAsync(User);
+                        apartmentListing.User = currentUser ;
+                        // Get and Assign Current time
+                        var currentTime = DateTime.Now;
+                        apartmentListing.DateCreated = currentTime;
+                        // Get the Category
+
+                        // Save the listing
+                        _listingService.AddListing(apartmentListing);
+
+                    }
+                    // Alert Upload Images
+                    TempData["Message"] = "Accepted Extensions are .jpeg .jpg .png .bmp";
+                    return View(apartmentListing);
+
+
+                }
+                // Alert Upload Images
+                TempData["Message"] = "Select Photo(s) for your Listing ";
+                return View(apartmentListing);
+
             }
-            catch
-            {
-                return View();
-            }
+            return View(apartmentListing);
+
         }
 
-        // GET: ListingController/Edit/5
+        // GET: Listing/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var listing = _listingService.GetById(id);
+            if (listing == null)
+            {
+                return NotFound();
+            }
+            return View(listing);
         }
 
-        // POST: ListingController/Edit/5
+        // POST: Listing/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, [Bind("Id, Description, Address, PostCode, PricePerMonth, NoOfBedrooms, NoOfBaths, OffStreetParking, LaundryAvailable, Files")] ApartmentListing apartmentListing)
         {
-            try
+            if( id != apartmentListing.Id)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            catch
+
+            // Check if the model is Valid
+            if (ModelState.IsValid)
             {
-                return View();
+                // Add More Images to the listing
+                // Check if Files were selected for the Listing
+                if (apartmentListing.Files != null)
+                {
+                    // Check if files are all images i.e. jpeg, jpg, png, bmp
+                    if (_listingService.AllFilesAreImages(apartmentListing.Files))
+                    {
+
+                        foreach (var formFile in apartmentListing.Files)
+                        {
+                            // Create a random file name for the Profile Image
+                            string randomFileName = Guid.NewGuid().ToString();
+                            // Get the extension of the filename
+                            string imageExtension = _listingService.GetImageExtension($"{formFile.FileName}");
+                            // Create the URL to the image
+                            string imageUrl = $"/images/listings/{randomFileName}{imageExtension}";
+                            // Create an Image listing object
+                            var image = new ListingImage
+                            {
+                                ApartmentListing = apartmentListing,
+                                ImageUrl = imageUrl
+                            };
+                            // Add the Image to the Listing's Images
+                            apartmentListing.Images.Append(image);
+                            // Copy the Image into the wwwroot/images/listings folder
+                            _listingService.UploadListingImage(randomFileName, imageExtension, formFile);
+                        }
+
+                        // Update the listing
+                        _listingService.UpdateListing(apartmentListing);
+                        // Alert that Listing has been Updated
+                        TempData["Success"] = "Listing Updated Successfully";
+                        return RedirectToAction("Edit", new { Id = id });
+
+                    }
+                    // Alert Upload Images
+                    TempData["Message"] = "Accepted Extensions are .jpeg .jpg .png .bmp";
+                    return View(apartmentListing);
+
+                }
+
+                if (apartmentListing.Files == null)
+                {
+                    _listingService.UpdateListing(apartmentListing);
+                }
+
             }
+
+            return View(apartmentListing);
         }
 
-        // GET: ListingController/Delete/5
+        // GET: Listing/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var listing = _listingService.GetById(id);
+            if (listing == null)
+            {
+                return NotFound();
+            }
+            return View(listing);
         }
 
-        // POST: ListingController/Delete/5
+        // POST: Listing/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult DeleteConfirmed(int id)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            _listingService.DeleteListing(id);
+            _listingService.DeleteListingPhotos(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

@@ -23,6 +23,7 @@ namespace ApartmentSearch.Service.Interface
         IEnumerable<string> GetApartmentImages(int apartmentId);
         void UploadListingImage(string filename, string fileExtension, IFormFile imageFile);
         void DeleteListingImage(int ImageId);
+        bool AllFilesAreImages(IEnumerable<IFormFile> Files);
 
     }
 }
