@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ApartmentSearch.Controllers
 {
-    [Authorize]
     public class ListingController : Controller
     {
         private readonly IListing _listingService;

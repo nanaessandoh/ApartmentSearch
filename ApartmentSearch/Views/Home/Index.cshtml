@@ -1,0 +1,47 @@
+﻿@model ApartmentSearch.Models.Home.ListingIndexModel
+
+@{
+    ViewData["Title"] = "Home - Listings";
+}
+
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h1 class="display-4">Rentals</h1>
+    </div>
+</div>
+
+<div class="card-columns">
+    @if (Model.Assets != null && Model.Assets.Any())
+    {
+        @foreach (var listing in Model.Assets)
+        {
+            <div class="card">
+                <a asp-controller="Home" asp-action="Details" asp-route-id="@listing.ListingId"></a>
+                <img class="card-img-top" src="..." alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">Last updated 3 mins ago</small>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@if (!(Model.Assets != null && Model.Assets.Any()))
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-warning" role="alert">
+                <h4 class="alert-heading">Sorry!</h4>
+                <p>There are no current listings at this moment</p>
+            </div>
+        </div>
+    </div>
+
+}
+
+
