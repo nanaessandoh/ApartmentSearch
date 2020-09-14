@@ -20,6 +20,7 @@ namespace ApartmentSearch.Models.Home
         public bool LaundryAvailable { get; set; }
         public string Category { get; set; }
         public string ImageUrl { get; set; }
+        public string DatePosted { get; set; }
         public double PricePerMonth { get; set; }
     }
 }

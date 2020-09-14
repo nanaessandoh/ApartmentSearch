@@ -17,14 +17,25 @@
         @foreach (var listing in Model.Assets)
         {
             <div class="card">
-                <a asp-controller="Home" asp-action="Details" asp-route-id="@listing.ListingId"></a>
-                <img class="card-img-top" src="..." alt="Card image cap">
+                <a class="stretched-link" asp-controller="Home" asp-action="Details" asp-route-id="@listing.ListingId"></a>
+                <img class="card-img-top" src="@listing.ImageUrl" alt="Card image cap">
                 <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <h6 class="card-title">@listing.Category</h6>
+                    <p>
+                        <div class="d-inline p-3"><i class="fa fa-bed" aria-hidden="true"></i></div>
+                        <div class="d-inline p-3"><i class="fa fa-bath" aria-hidden="true"></i></div>
+                    </p>
+                    <p>
+                        <div class="form-row align-items-center">
+                            <div class="col-auto">
+
+                            </div>
+                        </div>
+                    </p>
+
                 </div>
                 <div class="card-footer">
-                    <small class="text-muted">Last updated 3 mins ago</small>
+                    <small class="text-muted">@listing.DatePosted</small>
                 </div>
             </div>
         }

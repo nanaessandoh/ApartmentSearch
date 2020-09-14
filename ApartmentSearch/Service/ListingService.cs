@@ -115,10 +115,10 @@ namespace ApartmentSearch.Service
                 .Select(x => x.ImageUrl);
         }
 
-        public void DeleteListingImage(int ImageId)
+        public void DeleteListingImage(int imageId)
         {
             // Select filename of the image
-            string filename = _context.ListingImages.FirstOrDefault(x => x.Id == ImageId).ImageUrl;
+            string filename = _context.ListingImages.FirstOrDefault(x => x.Id == imageId).ImageUrl;
 
             try
             {
@@ -143,14 +143,19 @@ namespace ApartmentSearch.Service
             }
         }
 
-        public bool AllFilesAreImages(IEnumerable<IFormFile> Files)
+        public bool AllFilesAreImages(IEnumerable<IFormFile> files)
         {
             bool passed = true;
-            foreach( var formFile in Files)
+            foreach( var formFile in files)
             {
                 passed &= IsImage(formFile.FileName);
             }
             return passed;
+        }
+
+        public string ConvertToTimeAgo(DateTime dateTime)
+        {
+            return DataHelperMethod.TimeAgo(dateTime);
         }
     }
 }

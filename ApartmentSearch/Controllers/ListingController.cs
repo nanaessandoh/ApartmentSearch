@@ -36,8 +36,9 @@ namespace ApartmentSearch.Controllers
             var listingResult = allListings.Select(x => new ListingModel
             {
                 ListingId = x.Id,
-                Category = x.Cartegory.Name,
+                Category = x.Category.Name,
                 Description = x.Description,
+                DatePosted = _listingService.ConvertToTimeAgo(x.DateCreated),
                 NoOfBaths = x.NoOfBaths,
                 NoOfBedrooms = x.NoOfBedrooms,
                 OffStreetParking = x.OffStreetParking,
@@ -63,8 +64,8 @@ namespace ApartmentSearch.Controllers
             {
                 Id = listingModel.Id,
                 Address = listingModel.Address,
-                Cartegory = listingModel.Cartegory.Name,
-                DateCreated = listingModel.DateCreated,
+                Category = listingModel.Category.Name,
+                DateCreated = _listingService.ConvertToTimeAgo(listingModel.DateCreated),
                 Description = listingModel.Description,
                 Images = _listingService.GetApartmentImages(id),
                 LaundryAvailable = listingModel.LaundryAvailable,

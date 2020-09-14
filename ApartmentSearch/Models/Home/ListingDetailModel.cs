@@ -16,8 +16,8 @@ namespace ApartmentSearch.Models.Home
         public int NoOfBaths { get; set; }
         public bool OffStreetParking { get; set; }
         public bool LaundryAvailable { get; set; }
-        public DateTime DateCreated { get; set; }
-        public string Cartegory { get; set; }
+        public string DateCreated { get; set; }
+        public string Category { get; set; }
         public virtual IEnumerable<string> Images { get; set; }
     }
 }

@@ -46,7 +46,7 @@ namespace ApartmentSearch.Data
         [Required]
         [DataType(DataType.Text)]
         [Display(Name = "Apartment Type")]
-        public virtual Category Cartegory { get; set; }
+        public virtual Category Category { get; set; }
         [DataType(DataType.ImageUrl)]
         public virtual IEnumerable<ListingImage> Images { get; set; }
         [NotMapped]
