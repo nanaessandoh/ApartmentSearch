@@ -29,9 +29,11 @@ namespace ApartmentSearch.Data
         public double PricePerMonth { get; set; }
         [Required]
         [DataType(DataType.Text)]
+        [Range(1,20)]
         [Display(Name = "Number of Bedrooms")]
         public int NoOfBedrooms { get; set; }
         [Required]
+        [Range(1, 20)]
         [DataType(DataType.Text)]
         [Display(Name = "Numbers of Baths")]
         public int NoOfBaths { get; set; }

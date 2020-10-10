@@ -20,11 +20,12 @@ namespace ApartmentSearch.Service.Interface
         string GetListingImage(int apartmentId);
         string GetImageExtension(string filename);
         void DeleteListingPhotos(int apartmentId);
-        IEnumerable<string> GetApartmentImages(int apartmentId);
+        List<string> GetApartmentImages(int apartmentId);
         void UploadListingImage(string filename, string fileExtension, IFormFile imageFile);
         void DeleteListingImage(int imageId);
         string ConvertToTimeAgo(DateTime dateTime);
         bool AllFilesAreImages(IEnumerable<IFormFile> files);
+        bool SaveChanges();
 
     }
 }

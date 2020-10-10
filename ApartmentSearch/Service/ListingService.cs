@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ApartmentSearch.Service
 {
@@ -42,13 +43,11 @@ namespace ApartmentSearch.Service
         public void AddListing(ApartmentListing newListing)
         {
             _context.Add(newListing);
-            _context.SaveChangesAsync();
         }
 
         public void UpdateListing(ApartmentListing editListing)
         {
             _context.Update(editListing);
-            _context.SaveChangesAsync();
         }
 
         public void DeleteListing(int apartmentId)
@@ -57,7 +56,6 @@ namespace ApartmentSearch.Service
             if(listing != null) 
             {
                 _context.Remove(listing);
-                _context.SaveChangesAsync();
             }
         }
 
@@ -108,11 +106,11 @@ namespace ApartmentSearch.Service
             }
         }
 
-        public IEnumerable<string> GetApartmentImages(int apartmentId)
+        public List<string> GetApartmentImages(int apartmentId)
         {
             return _context.ListingImages
                 .Where(x => x.ApartmentListing.Id == apartmentId)
-                .Select(x => x.ImageUrl);
+                .Select(x => x.ImageUrl).ToList();
         }
 
         public void DeleteListingImage(int imageId)
@@ -156,6 +154,11 @@ namespace ApartmentSearch.Service
         public string ConvertToTimeAgo(DateTime dateTime)
         {
             return DataHelperMethod.TimeAgo(dateTime);
+        }
+
+        public bool SaveChanges()
+        {
+            return (_context.SaveChanges() >= 0);
         }
     }
 }

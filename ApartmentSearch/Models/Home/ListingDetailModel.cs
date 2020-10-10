@@ -18,6 +18,7 @@ namespace ApartmentSearch.Models.Home
         public bool LaundryAvailable { get; set; }
         public string DateCreated { get; set; }
         public string Category { get; set; }
-        public virtual IEnumerable<string> Images { get; set; }
+        public string PosterFirstName { get; set; }
+        public List<string> Images { get; set; }
     }
 }

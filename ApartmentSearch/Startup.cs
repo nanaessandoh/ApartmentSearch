@@ -27,7 +27,7 @@ namespace ApartmentSearch
             services.AddRazorPages();
             services.AddDbContext<ApartmentsDbContext>(options => options
             .UseSqlServer(Configuration.GetConnectionString("ApartmentSearchDbContextConnection")));
-            services.AddScoped<IListing, ListingService>();
+            services.AddScoped<IListing,ListingService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,7 +56,7 @@ namespace ApartmentSearch
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}");
                 endpoints.MapRazorPages();
             });
         }

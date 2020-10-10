@@ -11,13 +11,9 @@ namespace ApartmentSearch.Controllers
     public class HomeController : Controller
     {
         private readonly IListing _listingService;
-        private readonly IWebHostEnvironment _env;
-        public HomeController(IListing listingService, IWebHostEnvironment env, UserManager<ApartmentsUser> userManager)
-        {
-            _listingService = listingService;
-            _env = env;
 
-        }
+        public HomeController(IListing listingService) => _listingService = listingService;
+        
         // GET: ListingController
         public ActionResult Index()
         {
@@ -63,7 +59,8 @@ namespace ApartmentSearch.Controllers
                 NoOfBedrooms = listingModel.NoOfBedrooms,
                 OffStreetParking = listingModel.OffStreetParking,
                 PostCode = listingModel.PostCode,
-                PricePerMonth = listingModel.PricePerMonth
+                PricePerMonth = listingModel.PricePerMonth,
+                PosterFirstName = listingModel.User.FirstName
             };
 
             return View(model);

@@ -10,7 +10,7 @@ namespace ApartmentSearch.Service
         public static string TimeAgo(DateTime dateTime)
         {
 
-            // here we are going to subtract the passed in DateTime from the current time
+            // Subtract the time passed in DateTime from the current time
             TimeSpan ts = DateTime.Now.Subtract(dateTime);
 
             if (ts <= TimeSpan.FromSeconds(60))

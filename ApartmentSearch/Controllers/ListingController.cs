@@ -132,8 +132,14 @@ namespace ApartmentSearch.Controllers
                         apartmentListing.DateCreated = currentTime;
                         // Get the Category
 
-                        // Save the listing
+                        // Add and Save the listing
                         _listingService.AddListing(apartmentListing);
+                        _listingService.SaveChanges();
+
+                        // Alert that Appartment Listing has been created
+
+                        // Redirect to the index of Listing Controller
+                        return RedirectToAction(nameof(Index));
 
                     }
                     // Alert Upload Images
@@ -203,8 +209,9 @@ namespace ApartmentSearch.Controllers
                             _listingService.UploadListingImage(randomFileName, imageExtension, formFile);
                         }
 
-                        // Update the listing
+                        // Update and Save the listing
                         _listingService.UpdateListing(apartmentListing);
+                        _listingService.SaveChanges();
                         // Alert that Listing has been Updated
                         TempData["Success"] = "Listing Updated Successfully";
                         return RedirectToAction("Edit", new { Id = id });
@@ -244,6 +251,7 @@ namespace ApartmentSearch.Controllers
         {
             _listingService.DeleteListing(id);
             _listingService.DeleteListingPhotos(id);
+            _listingService.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
     }

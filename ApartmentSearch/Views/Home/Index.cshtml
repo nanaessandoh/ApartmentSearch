@@ -1,7 +1,7 @@
 ﻿@model ApartmentSearch.Models.Home.ListingIndexModel
 
 @{
-    ViewData["Title"] = "Home - Listings";
+    ViewData["Title"] = "Home - Apartments";
 }
 
 
@@ -16,23 +16,60 @@
     {
         @foreach (var listing in Model.Assets)
         {
-            <div class="card">
+            <div class="card mb-5">
                 <a class="stretched-link" asp-controller="Home" asp-action="Details" asp-route-id="@listing.ListingId"></a>
                 <img class="card-img-top" src="@listing.ImageUrl" alt="Card image cap">
                 <div class="card-body">
                     <h6 class="card-title">@listing.Category</h6>
-                    <p>
-                        <div class="d-inline p-3"><i class="fa fa-bed" aria-hidden="true"></i></div>
-                        <div class="d-inline p-3"><i class="fa fa-bath" aria-hidden="true"></i></div>
-                    </p>
-                    <p>
-                        <div class="form-row align-items-center">
-                            <div class="col-auto">
-
-                            </div>
+                    <div class="form-row align-items-center">
+                        <div class="col-auto">
+                            @if (listing.NoOfBedrooms > 1)
+                            {
+                                <div class="d-inline p-3"><i class="fa fa-bed" aria-hidden="true"></i> @listing.NoOfBedrooms Bedrooms</div>
+                            }
+                            else
+                            {
+                                <div class="d-inline p-3"><i class="fa fa-bed" aria-hidden="true"></i> @listing.NoOfBedrooms Bedroom</div>
+                            }
                         </div>
-                    </p>
+                        <div class="col-auto">
+                            @if (listing.NoOfBaths > 1)
+                            {
+                                <div class="d-inline p-3"><i class="fa fa-bath" aria-hidden="true"></i> @listing.NoOfBaths Bathrooms</div>
+                            }
+                            else
+                            {
+                                <div class="d-inline p-3"><i class="fa fa-bath" aria-hidden="true"></i> @listing.NoOfBaths Bathroom</div>
+                            }
 
+                        </div>
+                    </div>
+                    <div class="form-row align-items-center">
+                        <div class="col-auto">
+                            @if(listing.LaundryAvailable)
+                            {
+                                <div class="d-inline p-3"><i class="fa fa-washer" aria-hidden="true"></i> Available</div>
+                            }
+                            else
+                            {
+                                <div class="d-inline p-3"><i class="fa fa-washer" aria-hidden="true"></i> Not Available</div>
+                            }
+                        </div>
+                        <div class="col-auto">
+                            @if (listing.OffStreetParking)
+                            {
+                                <div class="d-inline p-3"><i class="fa fa-parking" aria-hidden="true"></i> Available</div>
+                            }
+                            else
+                            {
+                                <div class="d-inline p-3"><i class="fa fa-parking" aria-hidden="true"></i> Not Available</div>
+                            }
+                        </div>
+                    </div>
+                    <div class="text-truncate text-muted">
+                        <small>@listing.Description</small>
+                    </div>
+                    <p>Price per month: $@listing.PricePerMonth</p>
                 </div>
                 <div class="card-footer">
                     <small class="text-muted">@listing.DatePosted</small>
@@ -42,17 +79,16 @@
     }
 </div>
 
-@if (!(Model.Assets != null && Model.Assets.Any()))
+@if (!(Model.Assets == null && Model.Assets.Any()))
 {
     <div class="row">
         <div class="col-md-12">
             <div class="alert alert-warning" role="alert">
-                <h4 class="alert-heading">Sorry!</h4>
+                <h4 class="alert-heading">Sorry !</h4>
                 <p>There are no current listings at this moment</p>
             </div>
         </div>
     </div>
-
 }
 
 
